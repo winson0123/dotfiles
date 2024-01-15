@@ -76,7 +76,6 @@ separator-foreground = ${colors.lavender}
 
 font-0 = monospace;2
 font-1 = DejaVu Sans Mono wifi ramp;2
-font-2 = UbuntuMono Nerd Font Mono;2
 
 modules-left = i3 xwindow
 modules-center = 
@@ -110,6 +109,7 @@ label-focused-underline= ${colors.overlay0}
 label-focused-padding = 1 
 
 label-unfocused = %name%
+label-unfocused-background = ${colors.base}
 label-unfocused-padding = 1
 
 label-urgent = %name%
@@ -168,3 +168,34 @@ ramp-signal-2 = 
 ramp-signal-3 = 
 ramp-signal-4 = 
 ramp-signal-5 = 
+
+[module/battery]
+type = internal/battery
+
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+battery = BAT0
+adapter = ADP1
+
+poll-interval = 5
+
+time-format = %Hh %Mm
+
+full-at = 99
+label-full = FULL
+format-full = %{T2}<ramp-capacity>%{T-} <label-full>
+format-full-foreground = ${colors.teal}
+
+low-at = 20
+label-low = %percentage%% (TTE: %time%)
+format-low = %{T3}<ramp-capacity>%{T-} <label-discharging>
+format-low-foreground = ${colors.red}
+
+label-charging = %percentage%% (TTF: %time%)
+format-charging = %{T2}<ramp-capacity>%{T-} <label-charging>
+format-charging-foreground = ${colors.green}
+
+label-discharging = %percentage%% (TTE: %time%)
+format-discharging = %{T3}<ramp-capacity>%{T-} <label-discharging>
+format-discharging-foreground = ${colors.yellow}
+
