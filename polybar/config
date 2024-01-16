@@ -76,10 +76,12 @@ separator-foreground = ${colors.lavender}
 
 font-0 = monospace;2
 font-1 = DejaVu Sans Mono wifi ramp;2
+font-2 = battery\-charge;2
+font-3 = battery\-discharge;2
 
 modules-left = i3 xwindow
 modules-center = 
-modules-right = wired-network date 
+modules-right = wired-network battery date 
 
 cursor-click = pointer
 cursor-scroll = ns-resize
@@ -114,7 +116,7 @@ label-unfocused-padding = 1
 
 label-urgent = %name%
 label-urgent-background = ${colors.red}
-label-urgent-foreground = %{colors.mantle}
+label-urgent-foreground = ${colors.mantle}
 label-urgent-padding = 1
 
 [module/xwindow]
@@ -141,7 +143,7 @@ label-connected = %ifname% (%local_ip%)
 format-connected =  <label-connected>
 format-connected-foreground = ${colors.green}
 
-label-disconnected = 
+label-disconnected =  No connection
 format-disconnected = <label-disconnected>
 format-disconnected-foreground = ${colors.red}
 
@@ -154,20 +156,20 @@ interval = 3.0
 accumulate-stats = true
 unknown-as-up = true
 
-label-connected = %essid%  %downspeed:9%
-format-connected = <ramp-signal> <label-connected>
-format-connected-foreground = ${colors.green}
-
-label-disconnected = 
-format-disconnected = <label-disconnected>
-format-disconnected-foreground = ${colors.red}
-
 ramp-signal-0 = 
 ramp-signal-1 = 
 ramp-signal-2 = 
 ramp-signal-3 = 
 ramp-signal-4 = 
 ramp-signal-5 = 
+
+label-connected = %essid%  %downspeed:9%
+format-connected = <ramp-signal> <label-connected>
+format-connected-foreground = ${colors.green}
+
+label-disconnected =  No connection
+format-disconnected = <label-disconnected>
+format-disconnected-foreground = ${colors.red}
 
 [module/battery]
 type = internal/battery
@@ -178,24 +180,34 @@ battery = BAT0
 adapter = ADP1
 
 poll-interval = 5
-
 time-format = %Hh %Mm
 
+ramp-capacity-0 =  
+ramp-capacity-1 =  
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-5 = 
+ramp-capacity-6 = 
+ramp-capacity-7 = 
+ramp-capacity-8 = 
+ramp-capacity-9 = 
+
 full-at = 99
-label-full = FULL
-format-full = %{T2}<ramp-capacity>%{T-} <label-full>
+label-full = Fully Charged
+format-full = %{T3}<ramp-capacity>%{T-} <label-full>
 format-full-foreground = ${colors.teal}
 
 low-at = 20
 label-low = %percentage%% (TTE: %time%)
-format-low = %{T3}<ramp-capacity>%{T-} <label-discharging>
+format-low = %{T4}<ramp-capacity>%{T-} <label-low>
 format-low-foreground = ${colors.red}
 
 label-charging = %percentage%% (TTF: %time%)
-format-charging = %{T2}<ramp-capacity>%{T-} <label-charging>
+format-charging = %{T3}<ramp-capacity>%{T-} <label-charging>
 format-charging-foreground = ${colors.green}
 
 label-discharging = %percentage%% (TTE: %time%)
-format-discharging = %{T3}<ramp-capacity>%{T-} <label-discharging>
+format-discharging = %{T4}<ramp-capacity>%{T-} <label-discharging>
 format-discharging-foreground = ${colors.yellow}
 
