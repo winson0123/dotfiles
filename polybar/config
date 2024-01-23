@@ -52,11 +52,10 @@ rosewater = #f5e0dc
 transparent = #FF00000
 
 [bar/mybar]
+monitor = eDP
 width = 100%
 height = 24pt
 radius = 6
-
-; dpi = 96
 
 background = ${colors.base}
 foreground = ${colors.text}
@@ -75,24 +74,54 @@ separator = |
 separator-foreground = ${colors.lavender}
 
 font-0 = BlexMono Nerd Font Mono;2
-font-1 = DejaVu Sans Mono wifi ramp;2
+font-1 = DejaVu Sans Mono wifi ramp;
 font-2 = battery\-charge;2
 font-3 = battery\-discharge;2
 
 modules-left = i3 xwindow
 modules-center = 
-modules-right = wired-network battery date 
+modules-right = wireless-network battery date 
 
 cursor-click = pointer
 cursor-scroll = ns-resize
 
 enable-ipc = true
 
-; wm-restack = generic
-; wm-restack = bspwm
-; wm-restack = i3
+[bar/mybar_external]
+monitor = HDMI-A-0 
+width = 100%
+height = 24pt
+radius = 6
 
-; override-redirect = true
+background = ${colors.base}
+foreground = ${colors.text}
+
+line-size = 3pt
+
+border-size = 4pt
+border-color = #00000000
+
+padding-left = 0
+padding-right = 1
+
+module-margin = 1
+
+separator = |
+separator-foreground = ${colors.lavender}
+
+font-0 = BlexMono Nerd Font Mono;2
+font-1 = DejaVu Sans Mono wifi ramp;
+font-2 = battery\-charge;2
+font-3 = battery\-discharge;2
+
+modules-left = i3 xwindow
+modules-center = 
+modules-right = wireless-network battery date 
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+enable-ipc = true
 
 [settings]
 screenchange-reload = true
@@ -128,9 +157,9 @@ type = internal/date
 ; Seconds to sleep between updates
 interval = 1.0
 
-label = %time% • %date%
-time = %H:%M%
-date = %a,%d %b%
+label = %date% • %time%
+time = %I:%M%p%
+date = %a, %d %b
 
 [module/wired-network]
 type = internal/network
@@ -149,7 +178,7 @@ format-disconnected-foreground = ${colors.red}
 
 [module/wireless-network]
 type = internal/network
-interface = ens33 
+interface = wlp2s0 
 interface-type = wireless
 ; Seconds to sleep between updates
 interval = 3.0

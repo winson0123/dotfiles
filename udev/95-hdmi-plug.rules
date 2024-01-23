@@ -1,0 +1,2 @@
+KERNEL=="card0", ACTION=="change", SUBSYSTEM=="drm", RUN+="/usr/bin/zsh -c 'systemctl start polybar'" 
+

@@ -1,0 +1,5 @@
+Description=Autorun action for Polybar
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/su -c '/home/winson/.config/polybar/hdmi_plug.sh' winson
