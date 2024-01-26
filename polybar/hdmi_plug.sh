@@ -12,4 +12,11 @@ else
 	xrandr --auto
 fi
 
+devices=$(xinput list --name-only | grep -E 'Pen|Finger')
+
+while IFS= read -r device; do
+	device_id=$(xinput list --id-only "$device")
+	xinput map-to-output "$device_id" "${connected_monitors[0]}"
+done <<< "$devices"
+
 /usr/bin/sh -c "$polybar_script" winson > /dev/null 2>&1 & 
