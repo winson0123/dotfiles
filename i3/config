@@ -243,7 +243,7 @@ client.background        $base
 ## CUSTOM ##
 #
 # background wallpaper
-exec_always --no-startup-id feh --bg-fill /usr/share/backgrounds/gawr_gura_beach.jpg
+exec_always --no-startup-id feh --bg-fill $HOME/.local/share/wallpapers/gawr_gura_beach.jpg
 
 # start polybar to display workspace bar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
