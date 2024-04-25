@@ -5,7 +5,8 @@ CLONE_DIR="/tmp"
 ON_SUCCESS="LETSGOO"
 ON_FAIL="WHYFAIL"
 WHITE="\e[1;37m"
-GREEN="\e[1;31m"
+GREEN="\e[1;32m"
+RED="\e[1;31m"
 NC="\e[0m"
 
 #|-----< Log File >-----|#
@@ -24,7 +25,7 @@ _spinner() {
 
       # Start spin
       i=1
-      sp='\|/-'
+      sp="\|/-"
       delay=${SPINNER_DELAY:-0.15}
 
       while :
@@ -45,9 +46,9 @@ _spinner() {
       # Inform the user uppon success or failure
       echo -en "\b["
       if [[ $2 -eq 0 ]]; then
-        echo -en "${green}${on_success}${nc}"
+        echo -en "${GREEN}${ON_SUCCESS}${NC}"
       else
-        echo -en "${red}${on_fail}${nc}"
+        echo -en "${RED}${ON_FAIL}${NC}"
       fi
       echo -e "]"
       ;;
@@ -72,35 +73,30 @@ stop_spinner() {
   unset _sp_pid
 }
 
-copy_config() {
-  if ! [-d $HOME/.config/i3 ]
-  then
-    mkdir -p $/home/.config/i3
+copy_configs() {
+  if ! [ -d "$HOME/.config/i3" ]; then
+    mkdir -p $HOME/.config/i3
   fi
   cp -r i3/* $HOME/.config/i3/
 
-  if ! [-d $HOME/.config/polybar ]
-  then
-    mkdir -p $/home/.config/polybar
+  if ! [ -d "$HOME/.config/polybar" ]; then
+    mkdir -p $HOME/.config/polybar
   fi
   cp -r polybar/* $HOME/.config/polybar/
 
-  if ! [-d $HOME/.config/rofi ]
-  then
-    mkdir -p $/home/.config/rofi
+  if ! [ -d "$HOME/.config/rofi" ]; then
+    mkdir -p $HOME/.config/rofi
   fi
   cp -r rofi/* $HOME/.config/rofi/
 
-  if ! [-d $HOME/.local/share/wallpapers ]
-  then
+  if ! [ -d "$HOME/.local/share/wallpapers" ]; then
     mkdir -p $HOME/.local/share/wallpapers
   fi
   cp -r wallpapers/* $HOME/.local/share/wallpapers/
 }
 
 fonts_setup() {
-  if ! [-d $HOME/.local/share/fonts ]
-  then
+  if ! [ -d "$HOME/.local/share/fonts" ]; then
     mkdir -p $HOME/.local/share/fonts
   fi
   cp -r fonts/* $HOME/.local/share/fonts/
@@ -108,47 +104,46 @@ fonts_setup() {
 }
 
 deps_ubuntu() {
-  start_spinner ":: Updating sources list ..."
+  start_spinner "Updating sources list ..."
 
   # Linux Mint sources list
-  if [-d /etc/apt/sources.list.d/official-package-repositories.list ]
-  then
-    sudo sed -i -e 's|packages.linuxmint.com|mirror.0x.sg/linuxmint|g' /etc/apt/sources.list.d/official-package-repositories.list
-    sudo sed -i -e 's#\(archive\|security\)\.ubuntu\.com#mirror.sg.gs#g' -e 's|/ \+| |g' /etc/apt/sources.list.d/official-package-repositories.list
+  if [ -d "/etc/apt/sources.list.d/official-package-repositories.list" ]; then
+    sudo sed -i -e "s|packages.linuxmint.com|mirror.0x.sg/linuxmint|g" /etc/apt/sources.list.d/official-package-repositories.list
+    sudo sed -i -e "s#\(archive\|security\)\.ubuntu\.com#mirror.sg.gs#g" -e "s|/ \+| |g" /etc/apt/sources.list.d/official-package-repositories.list
   
   # Ubuntu sources list
   else
-    sudo sed -i -e 's#\(archive\|security\)\.ubuntu\.com#mirror.sg.gs#g' /etc/apt/sources.list 
+    sudo sed -i -e "s#\(archive\|security\)\.ubuntu\.com#mirror.sg.gs#g" /etc/apt/sources.list 
   fi
   stop_spinner $?
 
-  start_spinner ":: Updating system ..."
+  start_spinner "Updating system ..."
   sudo apt-get update >> foo.log 2>&1
   stop_spinner $?
 
-  start_spinner ":: Installing nala ..."
+  start_spinner "Installing nala ..."
   sudo apt install -y nala >> foo.log 2>&1
   stop_spinner $?
   echo -e ":: Nala installed [${GREEN}${ON_SUCCESS}${NC}]"
 
   #|-----< Installing necessary dependencies >-----|#
-  start_spinner ":: Installing necessary dependencies ..."
+  start_spinner "Installing necessary dependencies ..."
   sudo nala install -y build-essential libgtk-3-dev apt-transport-https ca-certificates gnupg curl wget git python3 python3.10-venv neovim zsh lxappearance i3 i3lock polybar rofi feh copyq >> foo.log 2>&1
   stop_spinner $?
   echo -e ":: Deps installed [${green}${on_success}${nc}]"
 }
 
 vscode() {
-  start_spinner ":: Installing VS Code ..."
+  start_spinner "Installing VS Code ..."
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/packages.microsoft.gpg
   sudo install -D -o root -g root -m 644 /tmp/packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-  sudo sh -c "echo 'deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main' > /etc/apt/sources.list.d/vscode.list"
+  sudo sh -c "echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list"
   rm -f /tmp/packages.microsoft.gpg
   sudo nala update >> foo.log 2>&1
   sudo nala install -y code >> foo.log 2>&1
   stop_spinner $?
 
-  start_spinner ":: Installing VS Code extensions ..."
+  start_spinner "Installing VS Code extensions ..."
   code --install-extension Catppuccin.catppuccin-vsc >> foo.log 2>&1
   code --install-extension Catppuccin.catppuccin-vsc-icons >> foo.log 2>&1
   code --install-extension eamodio.gitlens  >> foo.log 2>&1
@@ -160,10 +155,10 @@ vscode() {
 }
 
 docker() {
-  start_spinner ":: Installing Docker ..."
+  start_spinner "Installing Docker ..."
   wget -qO- https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor > /tmp/docker.gpg
   sudo install -D -o root -g root -m 644 /tmp/docker.gpg /etc/apt/keyrings/docker.gpg
-  sudo sh -c "echo 'deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable' > /etc/apt/sources.list.d/docker.list"
+  sudo sh -c "echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable" > /etc/apt/sources.list.d/docker.list"
   rm -f /tmp/docker.gpg
   sudo nala update >> foo.log 2>&1
   sudo nala install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> foo.log 2>&1
@@ -184,12 +179,12 @@ dragon_setup() {
 
 zoxide_setup() {
   curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-  echo '\neval "$(zoxide init zsh)"' >> ~/.zshrc
+  echo "\neval "$(zoxide init zsh)"" >> ~/.zshrc
 }
 
 zsh_setup() {
   curl -sSL https://github.com/zthxxx/jovial/raw/master/installer.sh | sudo -E bash -s ${USER:=`whoami`}
-  sed -i "s|jovial_parts\[margin-line\]='\\n'|jovial_parts[margin-line]=''|g" $HOME/.oh-my-zsh/custom/themes/jovial.zsh-theme
+  sed -i "s|jovial_parts\[margin-line\]="\\n"|jovial_parts[margin-line]=""|g" $HOME/.oh-my-zsh/custom/themes/jovial.zsh-theme
 }
 
 #|-----< Script start >-----|#
@@ -220,36 +215,34 @@ case $DISTRO in
 esac
 
 #|-----< Setup programming essentials >-----|#
-start_spinner 'Setting up programming essentials'
 programming_setup
-stop_spinner $?
 
 #|-----< Setup zsh >-----|#
-if ! [ -d $HOME/.zsh ];
+if ! [ -d "$HOME/.zsh" ];
 then
   mkdir -p $HOME/.zsh
 fi
-start_spinner 'Setting up zsh'
+start_spinner "Setting up zsh"
 zsh_setup >> foo.log 2>&1
 stop_spinner $?
 
 #|-----< Setup zoxide >-----|#
-start_spinner 'Setting up zoxide'
+start_spinner "Setting up zoxide"
 zoxide_setup >> foo.log 2>&1
 stop_spinner $?
 
 #|-----< Setup dragon >-----|#
-start_spinner 'Setting up dragon'
+start_spinner "Setting up dragon"
 dragon_setup >> foo.log 2>&1
 stop_spinner $?
 
 #|-----< Configs >-----|#
-# start_spinner 'Copying config files'
-# copy_configs >> foo.log 2>&1
-# stop_spinner $?
+start_spinner "Copying config files"
+copy_configs >> foo.log 2>&1
+stop_spinner $?
 
 #|-----< Fonts >-----|#
-start_spinner 'Copying fonts'
+start_spinner "Copying fonts"
 fonts_setup >> foo.log 2>&1
 stop_spinner $?
 
