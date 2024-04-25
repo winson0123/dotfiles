@@ -118,38 +118,38 @@ deps_ubuntu() {
   stop_spinner $?
 
   start_spinner "Updating system ..."
-  sudo apt-get update >> foo.log 2>&1
+  sudo apt-get update >> /tmp/foo.log 2>&1
   stop_spinner $?
 
   start_spinner "Installing nala ..."
-  sudo apt install -y nala >> foo.log 2>&1
+  sudo apt install -y nala >> /tmp/foo.log 2>&1
   stop_spinner $?
   echo -e ":: Nala installed [${GREEN}${ON_SUCCESS}${NC}]"
 
   #|-----< Installing necessary dependencies >-----|#
   start_spinner "Installing necessary dependencies ..."
-  sudo nala install -y build-essential libgtk-3-dev apt-transport-https ca-certificates gnupg curl wget git python3 python3.10-venv neovim zsh lxappearance i3 i3lock polybar rofi feh copyq >> foo.log 2>&1
+  sudo nala install -y build-essential libgtk-3-dev apt-transport-https ca-certificates gnupg curl wget git python3 python3.10-venv neovim zsh lxappearance i3 i3lock polybar rofi feh copyq >> /tmp/foo.log 2>&1
   stop_spinner $?
-  echo -e ":: Deps installed [${green}${on_success}${nc}]"
+  echo -e ":: Deps installed [${GREEN}${ON_SUCCESS}${NC}]"
 }
 
 vscode() {
   start_spinner "Installing VS Code ..."
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/packages.microsoft.gpg
   sudo install -D -o root -g root -m 644 /tmp/packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-  sudo sh -c "echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list"
+  sudo sh -c "echo 'deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main' > /etc/apt/sources.list.d/vscode.list"
   rm -f /tmp/packages.microsoft.gpg
-  sudo nala update >> foo.log 2>&1
-  sudo nala install -y code >> foo.log 2>&1
+  sudo nala update >> /tmp/foo.log 2>&1
+  sudo nala install -y code >> /tmp/foo.log 2>&1
   stop_spinner $?
 
   start_spinner "Installing VS Code extensions ..."
-  code --install-extension Catppuccin.catppuccin-vsc >> foo.log 2>&1
-  code --install-extension Catppuccin.catppuccin-vsc-icons >> foo.log 2>&1
-  code --install-extension eamodio.gitlens  >> foo.log 2>&1
-  code --install-extension esbenp.prettier-vscode >> foo.log 2>&1
-  code --install-extension hoovercj.vscode-power-mode >> foo.log 2>&1
-  code --install-extension usernamehw.errorlens >> foo.log 2>&1
+  code --install-extension Catppuccin.catppuccin-vsc >> /tmp/foo.log 2>&1
+  code --install-extension Catppuccin.catppuccin-vsc-icons >> /tmp/foo.log 2>&1
+  code --install-extension eamodio.gitlens  >> /tmp/foo.log 2>&1
+  code --install-extension esbenp.prettier-vscode >> /tmp/foo.log 2>&1
+  code --install-extension hoovercj.vscode-power-mode >> /tmp/foo.log 2>&1
+  code --install-extension usernamehw.errorlens >> /tmp/foo.log 2>&1
   stop_spinner $?
   echo -e ":: VS Code installed [${GREEN}${ON_SUCCESS}${NC}]"
 }
@@ -158,10 +158,10 @@ docker() {
   start_spinner "Installing Docker ..."
   wget -qO- https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor > /tmp/docker.gpg
   sudo install -D -o root -g root -m 644 /tmp/docker.gpg /etc/apt/keyrings/docker.gpg
-  sudo sh -c "echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable" > /etc/apt/sources.list.d/docker.list"
+  sudo sh -c "echo 'deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable' > /etc/apt/sources.list.d/docker.list"
   rm -f /tmp/docker.gpg
-  sudo nala update >> foo.log 2>&1
-  sudo nala install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> foo.log 2>&1
+  sudo nala update >> /tmp/foo.log 2>&1
+  sudo nala install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> /tmp/foo.log 2>&1
   stop_spinner $?
   echo -e ":: Docker installed [${GREEN}${ON_SUCCESS}${NC}]"
 }
@@ -223,27 +223,27 @@ then
   mkdir -p $HOME/.zsh
 fi
 start_spinner "Setting up zsh"
-zsh_setup >> foo.log 2>&1
+zsh_setup >> /tmp/foo.log 2>&1
 stop_spinner $?
 
 #|-----< Setup zoxide >-----|#
 start_spinner "Setting up zoxide"
-zoxide_setup >> foo.log 2>&1
+zoxide_setup >> /tmp/foo.log 2>&1
 stop_spinner $?
 
 #|-----< Setup dragon >-----|#
 start_spinner "Setting up dragon"
-dragon_setup >> foo.log 2>&1
+dragon_setup >> /tmp/foo.log 2>&1
 stop_spinner $?
 
 #|-----< Configs >-----|#
 start_spinner "Copying config files"
-copy_configs >> foo.log 2>&1
+copy_configs >> /tmp/foo.log 2>&1
 stop_spinner $?
 
 #|-----< Fonts >-----|#
 start_spinner "Copying fonts"
-fonts_setup >> foo.log 2>&1
+fonts_setup >> /tmp/foo.log 2>&1
 stop_spinner $?
 
 cat<<"EOF"
