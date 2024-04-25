@@ -6,7 +6,7 @@ ON_SUCCESS="LETSGOO"
 ON_FAIL="WHYFAIL"
 WHITE="\e[1;37m"
 GREEN="\e[1;31m"
-NC="e\[0m"
+NC="\e[0m"
 
 #|-----< Log File >-----|#
 touch /tmp/foo.log
@@ -108,7 +108,7 @@ fonts_setup() {
 }
 
 deps_ubuntu() {
-  echo ":: Updating sources list ..."
+  start_spinner ":: Updating sources list ..."
 
   # Linux Mint sources list
   if [-d /etc/apt/sources.list.d/official-package-repositories.list ]
@@ -120,47 +120,54 @@ deps_ubuntu() {
   else
     sudo sed -i -e 's#\(archive\|security\)\.ubuntu\.com#mirror.sg.gs#g' /etc/apt/sources.list 
   fi
+  stop_spinner $?
 
-  echo ":: Updating system ..."
-  sudo apt-get update
-  
-  echo ":: Ins/home/crow/dotfiles/install.sh talling nala ..."
-  sudo apt install -y nala
+  start_spinner ":: Updating system ..."
+  sudo apt-get update >> foo.log 2>&1
+  stop_spinner $?
+
+  start_spinner ":: Installing nala ..."
+  sudo apt install -y nala >> foo.log 2>&1
+  stop_spinner $?
   echo -e ":: Nala installed [${GREEN}${ON_SUCCESS}${NC}]"
 
   #|-----< Installing necessary dependencies >-----|#
-  sudo nala install -y build-essential libgtk-3-dev apt-transport-https ca-certificates gnupg curl wget git python3 python3.10-venv neovim zsh lxappearance i3 i3lock polybar rofi feh copyq
-
+  start_spinner ":: Installing necessary dependencies ..."
+  sudo nala install -y build-essential libgtk-3-dev apt-transport-https ca-certificates gnupg curl wget git python3 python3.10-venv neovim zsh lxappearance i3 i3lock polybar rofi feh copyq >> foo.log 2>&1
+  stop_spinner $?
   echo -e ":: Deps installed [${green}${on_success}${nc}]"
 }
 
 vscode() {
-  echo ":: Installing VS Code ..."
+  start_spinner ":: Installing VS Code ..."
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/packages.microsoft.gpg
   sudo install -D -o root -g root -m 644 /tmp/packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
   sudo sh -c "echo 'deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main' > /etc/apt/sources.list.d/vscode.list"
   rm -f /tmp/packages.microsoft.gpg
-  sudo nala update
-  sudo nala install -y code
+  sudo nala update >> foo.log 2>&1
+  sudo nala install -y code >> foo.log 2>&1
+  stop_spinner $?
 
-  echo ":: Installing VS Code extensions ..."
-  code --install-extension Catppuccin.catppuccin-vsc
-  code --install-extension Catppuccin.catppuccin-vsc-icons
-  code --install-extension eamodio.gitlens 
-  code --install-extension esbenp.prettier-vscode
-  code --install-extension hoovercj.vscode-power-mode
-  code --install-extension usernamehw.errorlens
+  start_spinner ":: Installing VS Code extensions ..."
+  code --install-extension Catppuccin.catppuccin-vsc >> foo.log 2>&1
+  code --install-extension Catppuccin.catppuccin-vsc-icons >> foo.log 2>&1
+  code --install-extension eamodio.gitlens  >> foo.log 2>&1
+  code --install-extension esbenp.prettier-vscode >> foo.log 2>&1
+  code --install-extension hoovercj.vscode-power-mode >> foo.log 2>&1
+  code --install-extension usernamehw.errorlens >> foo.log 2>&1
+  stop_spinner $?
   echo -e ":: VS Code installed [${GREEN}${ON_SUCCESS}${NC}]"
 }
 
 docker() {
-  echo ":: Installing Docker ..."
+  start_spinner ":: Installing Docker ..."
   wget -qO- https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor > /tmp/docker.gpg
   sudo install -D -o root -g root -m 644 /tmp/docker.gpg /etc/apt/keyrings/docker.gpg
   sudo sh -c "echo 'deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable' > /etc/apt/sources.list.d/docker.list"
   rm -f /tmp/docker.gpg
-  sudo nala update
-  sudo nala install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  sudo nala update >> foo.log 2>&1
+  sudo nala install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >> foo.log 2>&1
+  stop_spinner $?
   echo -e ":: Docker installed [${GREEN}${ON_SUCCESS}${NC}]"
 }
 
