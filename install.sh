@@ -144,12 +144,12 @@ vscode() {
   stop_spinner $?
 
   start_spinner "Installing VS Code extensions ..."
-  code --install-extension Catppuccin.catppuccin-vsc >> /tmp/foo.log 2>&1
-  code --install-extension Catppuccin.catppuccin-vsc-icons >> /tmp/foo.log 2>&1
-  code --install-extension eamodio.gitlens  >> /tmp/foo.log 2>&1
-  code --install-extension esbenp.prettier-vscode >> /tmp/foo.log 2>&1
-  code --install-extension hoovercj.vscode-power-mode >> /tmp/foo.log 2>&1
-  code --install-extension usernamehw.errorlens >> /tmp/foo.log 2>&1
+  sudo -u $USER code --install-extension Catppuccin.catppuccin-vsc >> /tmp/foo.log 2>&1
+  sudo -u $USER code --install-extension Catppuccin.catppuccin-vsc-icons >> /tmp/foo.log 2>&1
+  sudo -u $USER code --install-extension eamodio.gitlens  >> /tmp/foo.log 2>&1
+  sudo -u $USER code --install-extension esbenp.prettier-vscode >> /tmp/foo.log 2>&1
+  sudo -u $USER code --install-extension hoovercj.vscode-power-mode >> /tmp/foo.log 2>&1
+  sudo -u $USER code --install-extension usernamehw.errorlens >> /tmp/foo.log 2>&1
   stop_spinner $?
   echo -e ":: VS Code installed [${GREEN}${ON_SUCCESS}${NC}]"
 }
@@ -214,6 +214,16 @@ case $DISTRO in
     ;;
 esac
 
+#|-----< Configs >-----|#
+start_spinner "Copying config files"
+copy_configs >> /tmp/foo.log 2>&1
+stop_spinner $?
+
+#|-----< Fonts >-----|#
+start_spinner "Copying fonts"
+fonts_setup >> /tmp/foo.log 2>&1
+stop_spinner $?
+
 #|-----< Setup programming essentials >-----|#
 programming_setup
 
@@ -234,16 +244,6 @@ stop_spinner $?
 #|-----< Setup dragon >-----|#
 start_spinner "Setting up dragon"
 dragon_setup >> /tmp/foo.log 2>&1
-stop_spinner $?
-
-#|-----< Configs >-----|#
-start_spinner "Copying config files"
-copy_configs >> /tmp/foo.log 2>&1
-stop_spinner $?
-
-#|-----< Fonts >-----|#
-start_spinner "Copying fonts"
-fonts_setup >> /tmp/foo.log 2>&1
 stop_spinner $?
 
 cat<<"EOF"
